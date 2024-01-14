@@ -14,11 +14,11 @@ export const OffLineProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('load', () => {
-      window.addEventListener('online',  updateOnlineStatus);
-      window.addEventListener('offline', updateOnlineStatus);
-    });
-
+    // window.addEventListener('load', () => {
+    
+    // });
+    window.addEventListener('online',  updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
     return () => {
       window.removeEventListener('online',  updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);

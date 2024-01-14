@@ -42,9 +42,12 @@ const CardCreatePost = ({user}) => {
 
   const handleSubmit = useCallback(async (newPost) => {
     try{
-      const formData = new FormData();
-      formData.append('post', newPost.post);
-      const res = await newPostFetch(formData);
+      const { post, thumbnail } = newPost;
+      const body = {
+        post,
+        thumbnail
+      }
+      const res = await newPostFetch(body);
       console.log("debug res::",res);
     } catch (error) {
       console.error(error);
