@@ -1,21 +1,17 @@
-import NewFormDynamic from '@/components/FormDynamic/FormDynamic';
 import React from 'react';
+import Box from '@mui/material/Box';
+import NewFormDynamic from '@/components/FormDynamic/FormDynamic';
+import './Login.css'
 
 const LoginPage = () => {
 
   const formData = {
-    cv: 'url',
-    contry: 'select',
-    thumbnail: 'multimedia',
     username: 'textShort',
-    description: 'textLong',
-    pass: 'password',
     email: {
-      value: "roney_capri@hotmail.com",
+      value: '',
       type: 'email'
     },
     remember_me: 'checkbox',
-    total: 'number'
   };
 
   const handleSubmit = (values,formik) => {
@@ -24,14 +20,23 @@ const LoginPage = () => {
   }
 
   return (
-    <div>
+    <Box
+      sx={{
+        p: 2,
+        borderRadius: 2,
+        bgcolor: 'background.default',
+        display: 'grid',
+        gridTemplateColumns: { md: '1fr 1fr' },
+        gap: 2,
+      }}
+    >
       <h1>Login Page</h1>
       <NewFormDynamic 
         enableReinitialize={false}
         initValues={formData}
         onSubmit={handleSubmit}
       />
-    </div>
+    </Box>
   )
 }
 
