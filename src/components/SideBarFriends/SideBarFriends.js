@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import Avatar from '@mui/material/Avatar';
 
 
 const friends = [
@@ -25,7 +25,10 @@ export default function SideBarFriends() {
             return (
               <ListItemButton key={item}>
                 <ListItemIcon>
-                  <AccountCircle />
+                <Avatar
+                  src="https://picsum.photos/200/300" 
+                  alt="profile" 
+                />
                 </ListItemIcon>
                 <ListItemText primary={item+''} />
               </ListItemButton>
