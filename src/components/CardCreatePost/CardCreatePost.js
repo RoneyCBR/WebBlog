@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Card from '@mui/material/Card'
 import styles from './CardCreatePost.module.css'
@@ -9,6 +9,7 @@ import Button from '@mui/material/Button'
 import CardMedia from '@mui/material/CardMedia'
 import IconButton from '@mui/material/IconButton'
 import SendIcon from '@mui/icons-material/Send'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 const propTypes = {
   user: PropTypes.object
@@ -32,6 +33,10 @@ const CardCreatePost = ({user}) => {
     const file = event.target.files[0];
     setNewPost({...newPost,'thumbnail': file})
   },[newPost]);
+
+  const handleCancelPost = useCallback(()=>{
+    setNewPost(null)
+  },[setNewPost])
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 
@@ -65,9 +70,14 @@ const CardCreatePost = ({user}) => {
           />
           {
             activeOptions && 
-            <IconButton sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}} alt="send">
-              <SendIcon />
-            </IconButton>
+            <Fragment>
+              <IconButton sx={{border:'1px solid #ccc'}} alt="delete" onClick={handleCancelPost}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}} alt="send">
+                <SendIcon />
+              </IconButton>
+            </Fragment>
           }
         </div>
         {activeOptions && <Divider/>}
