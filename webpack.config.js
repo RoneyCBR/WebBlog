@@ -16,6 +16,9 @@ const imagesPlugin = new CopyWebpackPlugin({
 module.exports = {
   mode: 'development',
   devtool: false,
+  devServer: {
+    historyApiFallback: true,
+  },
   entry: './src/index.js',
   output: {
     filename: 'main.js',

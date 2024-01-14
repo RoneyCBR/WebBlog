@@ -1,0 +1,11 @@
+.main {
+  position: relative;
+  margin: 0px 0px;
+  padding: 0px 0px;
+  align-self: stretch;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #20232a, #252b33);
+}

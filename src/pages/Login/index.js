@@ -2,9 +2,13 @@ import React, { useState, useCallback } from 'react';
 import NewFormDynamic from '@/components/FormDynamic/FormDynamic';
 import Button from '@mui/material/Button';
 import styles from './Login.module.css';
+import { useUserContext } from '@/context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
 
+  const navigate = useNavigate();
+  const { setUser } = useUserContext();
   const [tab, setTab] = useState(0);
   const formData = {
     username: 'textShort',
@@ -21,8 +25,10 @@ const LoginPage = () => {
 
   const handleSubmit = useCallback((values,formik) => {
     console.log('debug handleSubmit::',values);
+    setUser(values);
     formik.setSubmitting(false);
-  },[]);
+    navigate('/home');
+  },[navigate]);
 
   const handleChangeTab = useCallback(() => {
     setTab(tab===0 ? 1 : 0);
