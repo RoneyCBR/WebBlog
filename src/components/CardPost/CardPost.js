@@ -21,10 +21,10 @@ const CardPost = () => {
           />
           <Box flex={1} sx={{display:'flex',justifyContent:'flex-end'}}>
             <div>
-            <IconButton aria-label="delete">
+            <IconButton >
               <MoreHorizIcon />
             </IconButton>
-            <IconButton aria-label="delete">
+            <IconButton >
               <CloseIcon />
             </IconButton>
             </div>
