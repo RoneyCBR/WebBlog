@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import SendIcon from '@mui/icons-material/Send'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useOffLineContext } from '../../context/OffLineContext'
+import { newPostFetch } from '../../api/post/post'
 
 const propTypes = {
   user: PropTypes.object
@@ -37,7 +38,18 @@ const CardCreatePost = ({user}) => {
 
   const handleCancelPost = useCallback(()=>{
     setNewPost(null)
-  },[setNewPost])
+  },[setNewPost]);
+
+  const handleSubmit = useCallback(async (newPost) => {
+    try{
+      const formData = new FormData();
+      formData.append('post', newPost.post);
+      const res = await newPostFetch(formData);
+      console.log("debug res::",res);
+    } catch (error) {
+      console.error(error);
+    }
+  },[]);
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 
@@ -70,10 +82,20 @@ const CardCreatePost = ({user}) => {
           {
             activeOptions && 
             <Fragment>
-              <IconButton sx={{border:'1px solid #ccc'}} alt="delete" onClick={handleCancelPost} disabled={!isOnline}>
+              <IconButton 
+                sx={{border:'1px solid #ccc'}}
+                alt="delete" 
+                onClick={handleCancelPost} 
+                disabled={!isOnline}
+              >
                 <DeleteIcon />
               </IconButton>
-              <IconButton sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}} alt="send" disabled={!isOnline}>
+              <IconButton 
+                sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}}
+                alt="send"
+                disabled={!isOnline || !newPost?.post}
+                onClick={()=>handleSubmit(newPost)}
+              >
                 <SendIcon />
               </IconButton>
             </Fragment>
