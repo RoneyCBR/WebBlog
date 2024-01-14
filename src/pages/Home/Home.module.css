@@ -1,11 +1,48 @@
 .main {
   position: relative;
-  margin: 0px 0px;
-  padding: 0px 0px;
+  margin: 0px;
+  padding: 0px;
   align-self: stretch;
-  height: 100vh;
+  height: calc(100vh - 70px);
+  display: grid;
+  grid-template-columns: 1fr 50% 1fr;
+  gap: 1em;
+}
+
+.item{
+  overflow-y: auto;
+  height: 100%;
+}
+
+.postContainer{
+  padding: 1em;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to right, #20232a, #252b33);
+  flex-direction: column;
+  gap: 1em;
+  align-self: stretch;
+}
+
+.optionsContainer,.optionsFrends{
+  display: auto;
+  flex: 0 0 auto; 
+}
+
+
+@media screen and (max-width: 950px) {
+  .main {
+    grid-template-columns: 60% 1fr;
+  } 
+  .optionsContainer{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .main {
+    grid-template-columns: 1fr;
+  } 
+
+  .optionsFrends{
+    display: none;
+  }
 }
