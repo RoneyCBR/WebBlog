@@ -8,7 +8,9 @@ import { useUserContext } from '@/context/UserContext';
 import SectionPost from './components/SectionPost';
 
 const Home = () => {
+  
   const { user } = useUserContext();
+
   return (
     <Fragment>
       <Header />

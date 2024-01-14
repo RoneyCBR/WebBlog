@@ -1,0 +1,16 @@
+{
+  "name": "Webblog",
+  "short_name": "Webblog",
+  "description": "Webblog",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/banner-login.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

@@ -10,13 +10,14 @@ import CardMedia from '@mui/material/CardMedia'
 import IconButton from '@mui/material/IconButton'
 import SendIcon from '@mui/icons-material/Send'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { useOffLineContext } from '../../context/OffLineContext'
 
 const propTypes = {
   user: PropTypes.object
 }
 
 const CardCreatePost = ({user}) => {
-
+  const { isOnline } = useOffLineContext();
   const [newPost, setNewPost] = useState(null);
   const fileInput = useRef(null);
 
@@ -40,9 +41,6 @@ const CardCreatePost = ({user}) => {
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 
-  
-  console.log("debug newPost::",newPost)
-
   return (
     <Card sx={{borderRadius:'20px'}}>
       <input
@@ -64,6 +62,7 @@ const CardCreatePost = ({user}) => {
             size="small"
             sx={{ flex:1 }}
             placeholder={`What do you think, ${user?.username}?`}
+            disabled={!isOnline}
             value={newPost?.post || ''}
             name="post"
             onChange={handleValue}
@@ -71,10 +70,10 @@ const CardCreatePost = ({user}) => {
           {
             activeOptions && 
             <Fragment>
-              <IconButton sx={{border:'1px solid #ccc'}} alt="delete" onClick={handleCancelPost}>
+              <IconButton sx={{border:'1px solid #ccc'}} alt="delete" onClick={handleCancelPost} disabled={!isOnline}>
                 <DeleteIcon />
               </IconButton>
-              <IconButton sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}} alt="send">
+              <IconButton sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}} alt="send" disabled={!isOnline}>
                 <SendIcon />
               </IconButton>
             </Fragment>
@@ -106,9 +105,9 @@ const CardCreatePost = ({user}) => {
         }
         <Divider/>
         <div className={styles.footerCard}>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} >Group</Button>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} onClick={handleButtonClick} >Image/Video</Button>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} >Activity</Button>
+        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Group</Button>
+        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} onClick={handleButtonClick} >Image/Video</Button>
+        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Activity</Button>
         </div>
       </div>
     </Card>

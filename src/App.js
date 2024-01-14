@@ -7,15 +7,18 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from "./theme";
 import RoutesMain from "./RoutesMain";
 import { UserProvider } from "./context/UserContext";
-
+import { OffLineProvider } from "./context/OffLineContext";
 
 const App = () => {
+
   return (
     <BrowserRouter>
       <I18nextProvider i18n={i18n}>
         <ThemeProvider theme={theme}>
           <UserProvider>
-            <RoutesMain />
+            <OffLineProvider>
+              <RoutesMain />
+            </OffLineProvider>
           </UserProvider>
         </ThemeProvider>
       </I18nextProvider>
