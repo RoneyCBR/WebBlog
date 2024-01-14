@@ -42,7 +42,7 @@ const WrappedMaterialTextarea = ({ field, form: { touched, errors }, ...props })
 const InputTextArea = ({ name, placeholder, label, loading}) => {
   return (
     <Fragment>
-      <FormLabel htmlFor={name}>{label || capitalizeFirstLetter(name)}</FormLabel>
+      <FormLabel htmlFor={name} sx={{color:'inherit'}}>{label || capitalizeFirstLetter(name)}</FormLabel>
       <Field
         placeholder={placeholder || capitalizeFirstLetter(name)}
         name={name}

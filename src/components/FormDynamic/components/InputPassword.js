@@ -41,7 +41,7 @@ const InputPassword = ({ name, placeholder, label, loading}) => {
 
   return (
     <Fragment>
-      <FormLabel htmlFor={name}>{label || capitalizeFirstLetter(name)}</FormLabel>
+      <FormLabel htmlFor={name} sx={{color:'inherit'}}>{label || capitalizeFirstLetter(name)}</FormLabel>
       <Field
         type="password"
         placeholder={placeholder || capitalizeFirstLetter(name)}

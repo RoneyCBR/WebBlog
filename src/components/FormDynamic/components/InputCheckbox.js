@@ -38,7 +38,7 @@ const WrappedMaterialTextField = ({ field, label, form: { touched, errors }, ...
             name={field?.name} 
             id={field?.name}  
             sx={{
-              color: errorMessage ? '#d32f2f' :'inital'
+              color: errorMessage ? '#d32f2f' :'inherit'
             }}
           />
         }

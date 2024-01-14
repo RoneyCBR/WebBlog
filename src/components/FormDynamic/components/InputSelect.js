@@ -63,14 +63,14 @@ const InputSelect = ({ name, placeholder, label, loading, initialSelectedValue, 
 
   return (
     <Fragment>
-      <FormLabel htmlFor={name}>
-        {newLabel ? newLabel : capitalizeFirstLetter(name+'')}
+      <FormLabel htmlFor={name} sx={{color:'inherit'}}>
+        {newLabel || capitalizeFirstLetter(name+'')}
       </FormLabel>
       <Field
         name={name}
         disabled={loading}
         options={options}
-        placeholder={newPlaceHolder ? newPlaceHolder : capitalizeFirstLetter(name+'')}
+        placeholder={newPlaceHolder || capitalizeFirstLetter(name+'')}
         initialValue={initialSelectedValue || ''}
         component={WrappedMaterialSelect}
       />

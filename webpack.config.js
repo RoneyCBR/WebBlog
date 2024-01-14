@@ -1,9 +1,16 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const htmlPlugin = new HtmlWebpackPlugin({
   template: './public/index.html',
   filename: 'index.html'
+});
+
+const imagesPlugin = new CopyWebpackPlugin({
+  patterns: [
+    { from: 'public', to: 'dist' },
+  ]
 });
 
 module.exports = {
@@ -32,8 +39,6 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name].[ext]',
-              context: path.resolve(__dirname, 'src'),
-              outputPath: 'dist/',
               publicPath: '/',
               useRelativePaths: true
             },
@@ -42,10 +47,11 @@ module.exports = {
       }
     ],
   },
-  plugins: [htmlPlugin],
+  plugins: [htmlPlugin,imagesPlugin],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src/'),
+      '/': path.resolve(__dirname, 'public/'),
     },
   },
 };

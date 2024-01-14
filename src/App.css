@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --persian-green-50: 240, 253, 251;
   --persian-green-100: 203, 252, 244;

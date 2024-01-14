@@ -80,7 +80,7 @@ const FormDynamic = ({
   const labels = (textLabels && combineWithForm(formattedState, textLabels)) || {}
 
   if (!state || state === undefined || state?.length === 0) {
-    return <>FormDynamic mount - please initialize form</>
+    return <h5>FormDynamic mount - please initialize form</h5>
   }
 
   return (
@@ -161,47 +161,49 @@ const BuildForm = ({
     >
       {({isSubmitting, ...formOptions}) => (
         <Form className={styles.form}>
-          <div className={styles.col1}>
+          {
+            attributes?.map((name,index)=>{
+              const initValue = form[name] || null;
+              return (
+                <div key={name} style={{display:'flex',flexDirection:'column'}} >
+                  <RenderComponent 
+                    name={name} 
+                    placeholder={placeholders[name]}
+                    label={labels[name]}
+                    type={types[index]}
+                    loading={isSubmitting || loading}
+                    initValue={initValue}
+                  />
+                </div>
+              );
+            })
+          }
+          {renderButtons?.(
             {
-              attributes?.map((name,index)=>{
-                const initValue = form[name] || null;
-                return (
-                  <div key={name} style={{display:'flex',flexDirection:'column'}} >
-                    <RenderComponent 
-                      name={name} 
-                      placeholder={placeholders[name]}
-                      label={labels[name]}
-                      type={types[index]}
-                      loading={isSubmitting || loading}
-                      initValue={initValue}
-                    />
-                  </div>
-                );
-              })
+              disabled: isSubmitting || loading,
             }
-            {renderButtons?.(isSubmitting)}
-            {!renderButtons && (
-            <div className={styles.contentButtons}>
-              <Button 
-                color="success" variant="contained"
-                type="submit"
-                disabled={isSubmitting || loading}
-                data-testid="custom-form-submit-button"
-              >
-                {textButtons?.submit ? textButtons.submit : t("options.accept")}
-              </Button>
-              <Button 
-                color="success" variant="transparent"
-                type="button"
-                onClick={() => handleCancel({ ...formOptions, isSubmitting })}
-                disabled={isSubmitting || loading}
-                data-testid="custom-form-cancel-button"
-              >
-                {textButtons?.cancel ? textButtons.cancel : t("options.cancel")}
-              </Button> 
-            </div>
-            )}
+          )}
+          {!renderButtons && (
+          <div className={styles.contentButtons}>
+            <Button 
+              color="success" variant="contained"
+              type="submit"
+              disabled={isSubmitting || loading}
+              data-testid="custom-form-submit-button"
+            >
+              {textButtons?.submit ? textButtons.submit : t("options.accept")}
+            </Button>
+            <Button 
+              color="success" variant="transparent"
+              type="button"
+              onClick={() => handleCancel({ ...formOptions, isSubmitting })}
+              disabled={isSubmitting || loading}
+              data-testid="custom-form-cancel-button"
+            >
+              {textButtons?.cancel ? textButtons.cancel : t("options.cancel")}
+            </Button> 
           </div>
+          )}
         </Form>
       )}
     </Formik>
