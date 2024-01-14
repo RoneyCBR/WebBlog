@@ -229,7 +229,4 @@ export const RenderComponent = ({type, name, placeholder, label, loading, initVa
   );
 }
 
-
-
-
 export default FormDynamic;
