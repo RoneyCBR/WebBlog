@@ -42,17 +42,26 @@ const CardCreatePost = ({user}) => {
 
   const handleSubmit = useCallback(async (newPost) => {
     try{
+      const currentDate = new Date();
       const { post, thumbnail } = newPost;
+      let thumbnailBlob = null;
+      if (thumbnail) {
+        const arrayBuffer = await thumbnail.arrayBuffer();
+        thumbnailBlob = new Blob([arrayBuffer]);
+      }
+
       const body = {
         post,
-        thumbnail
+        thumbnail: thumbnailBlob,
+        date: currentDate,
+        userId: user?.pk
       }
       const res = await newPostFetch(body);
       console.log("debug res::",res);
     } catch (error) {
       console.error(error);
     }
-  },[]);
+  },[user]);
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 

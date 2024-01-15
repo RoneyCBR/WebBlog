@@ -10,7 +10,10 @@ import CloseIcon from '@mui/icons-material/Close'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import CardMedia from '@mui/material/CardMedia'
 
-const CardPost = () => {
+const CardPost = ({item}) => {
+
+  const thumbnailSrc = `data:image/jpeg;base64,${item?.thumbnail}`; 
+
   return (
     <Card sx={{borderRadius:'20px'}}>
       <div className={styles.bodyCard}>
@@ -31,14 +34,14 @@ const CardPost = () => {
           </Box>
         </div>
         <div>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, quae.</p>
+          <p>{item?.post}</p>
         </div>
         <Card className={styles.cardPostContentImage}>
           <CardMedia
             component="img"
             loading="lazy"
             alt="img-post" 
-            src='/banner-login.jpg'
+            src={item?.thumbnail ? thumbnailSrc : '/banner-login.jpg'}
             sx={{
               width:'100%',
               height:'100%',

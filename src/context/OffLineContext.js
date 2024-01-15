@@ -17,12 +17,16 @@ export const OffLineProvider = ({ children }) => {
     // window.addEventListener('load', () => {
     
     // });
-    window.addEventListener('online',  updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    return () => {
-      window.removeEventListener('online',  updateOnlineStatus);
-      window.removeEventListener('offline', updateOnlineStatus);
-    };
+    const temp = 22;
+    if(temp){
+      window.addEventListener('online',  updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      return () => {
+        window.removeEventListener('online',  updateOnlineStatus);
+        window.removeEventListener('offline', updateOnlineStatus);
+      };
+    }
+  
   }, []);
 
   useEffect(() => {

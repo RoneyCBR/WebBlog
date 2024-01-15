@@ -4,12 +4,16 @@ import Button from '@mui/material/Button';
 import styles from './Login.module.css';
 import { useUserContext } from '@/context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { newUserFetch } from '../../api/user/user';
+import { newAuthFetch } from '../../api/authentication/authentication';
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
   const { setUser } = useUserContext();
   const [tab, setTab] = useState(0);
+  const [loading, setLoading] = useState(false);
+  
   const formData = {
     username: 'textShort',
     password: 'password',
@@ -17,18 +21,31 @@ const LoginPage = () => {
   };
 
   const formDataSignIn = {
-    newUsername: 'textShort',
-    newPass1: 'password',
-    newPass2: 'password',
+    username: 'textShort',
+    password: 'password',
     terms_and_conditions: 'checkbox',
   };
 
-  const handleSubmit = useCallback((values,formik) => {
-    console.log('debug handleSubmit::',values);
-    setUser(values);
-    formik.setSubmitting(false);
-    navigate('/home');
-  },[navigate]);
+  const handleSubmit = useCallback(async(values,formik) => {
+    try{
+      setLoading(true);
+      console.log('debug handleSubmit::',values);
+      const { username, password } = values;
+      let res = null;
+      if(tab === 0){
+        res = await newAuthFetch({ username, password });
+      }else{
+        res = await newUserFetch({ username, password });
+      }
+      setUser(res);
+      navigate('/home');
+    }catch(error){
+      console.log('error handleSubmit::',error);
+    } finally {
+      formik.setSubmitting(false);
+      setLoading(false);
+    }
+  },[navigate,tab,setLoading]);
 
   const handleChangeTab = useCallback(() => {
     setTab(tab===0 ? 1 : 0);
@@ -64,7 +81,7 @@ const LoginPage = () => {
         </div>
         <div>
         <div className={styles.footerForm} >
-          <button onClick={handleChangeTab} className={styles.buttonBottom}>
+          <button disabled={loading} onClick={handleChangeTab} className={styles.buttonBottom}>
             {tab === 1 ? 'LogIn':'SignIn'}
           </button>
         </div>
