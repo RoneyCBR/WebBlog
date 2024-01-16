@@ -17,7 +17,7 @@ const propTypes = {
   user: PropTypes.object
 }
 
-const CardCreatePost = ({user}) => {
+const CardCreatePost = ({user, init}) => {
   const { isOnline } = useOffLineContext();
   const [newPost, setNewPost] = useState(null);
   const fileInput = useRef(null);
@@ -44,24 +44,19 @@ const CardCreatePost = ({user}) => {
     try{
       const currentDate = new Date();
       const { post, thumbnail } = newPost;
-      let thumbnailBlob = null;
-      if (thumbnail) {
-        const arrayBuffer = await thumbnail.arrayBuffer();
-        thumbnailBlob = new Blob([arrayBuffer]);
-      }
-
       const body = {
         post,
-        thumbnail: thumbnailBlob,
+        thumbnail: thumbnail || null,
         date: currentDate,
         userId: user?.pk
       }
-      const res = await newPostFetch(body);
-      console.log("debug res::",res);
+      await newPostFetch(body);
+      await init();
+      setNewPost(null);
     } catch (error) {
       console.error(error);
     }
-  },[user]);
+  },[user,init,setNewPost]);
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 

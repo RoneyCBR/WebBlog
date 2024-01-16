@@ -14,5 +14,5 @@ export const newPostFetch = async (body) => {
 
 export const getPosts = async () => {
   const res = await axios.get(`${API}${PATH}`);
-  return res?.data?.posts || null;
+  return res?.data || [];
 }
