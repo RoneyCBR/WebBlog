@@ -14,21 +14,27 @@ import { useOffLineContext } from '../../context/OffLineContext'
 import { newPostFetch } from '../../api/post/post'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { Formik, Form, ErrorMessage, Field } from 'formik';
+
+
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required('El título es obligatorio'),
+  author: Yup.string().required('El autor es obligatorio'),
+  description: Yup.string().required('La descripción es obligatoria')
+});
 
 const propTypes = {
   user: PropTypes.object
 }
 
 const CardCreatePost = ({user, concatNewPost}) => {
+
   const { isOnline } = useOffLineContext();
-  const [newPost, setNewPost] = useState(null);
   const [error, setError] = useState(null);
   const fileInput = useRef(null);
-
-  const handleValue = useCallback((e) => {
-    const { name, value } = e.target;
-    setNewPost({...newPost, [name+'']: value})
-  },[setNewPost,newPost]);
+  const [file, setFile] = useState(null);
 
   const handleButtonClick = () => {
     fileInput.current.click();
@@ -36,33 +42,32 @@ const CardCreatePost = ({user, concatNewPost}) => {
 
   const handleFileChange = useCallback((event) => {
     const file = event.target.files[0];
-    setNewPost({...newPost,'thumbnail': file})
-  },[newPost]);
+    setFile(file);
+  },[setFile]);
 
-  const handleCancelPost = useCallback(()=>{
-    setNewPost(null)
-  },[setNewPost]);
-
-  const handleSubmit = useCallback(async (newPost) => {
+  const handleSubmit = useCallback(async (values, paramsFormik) => {
     try{
-      const { title, author, description, thumbnail } = newPost;
+      console.log("debug values::",values);
+      console.log("debug paramsFormik::",paramsFormik);
+      const { title, author, description } = values;
       const body = {
         title,
         author,
         description,
-        thumbnail: thumbnail || null,
+        thumbnail: file || null,
         userId: user?.pk
       }
       const res = await newPostFetch(body);
       concatNewPost(res?.post)
-      setNewPost(null);
+      paramsFormik?.resetForm?.();
     } catch (error) {
       setError(error?.response?.data?.message || 'Ocurrio un error, intente mas tarde!');
       console.error(error);
+    } finally {
+      paramsFormik?.setSubmitting?.();
     }
-  },[user,concatNewPost,setNewPost]);
+  },[user,concatNewPost,file]);
 
-  const activeOptions = (newPost?.title)
 
   return (
     <Card sx={{borderRadius:'20px'}}>
@@ -73,98 +78,117 @@ const CardCreatePost = ({user, concatNewPost}) => {
         onChange={handleFileChange}
         accept="image/*,video/*"
       />
-      <div className={styles.bodyCard}>
-        <div className={styles.headerCard}>
-          <Avatar
-            src="https://picsum.photos/200/300" 
-            alt="profile" 
-          />
-          <TextField 
-            label="Title"
-            variant="outlined"
-            size="small"
-            sx={{ flex:1 }}
-            placeholder={`What do you think, ${user?.username}?`}
-            disabled={!isOnline}
-            value={newPost?.title || ''}
-            name="title"
-            onChange={handleValue}
-          />
-          {
-            activeOptions && 
-            <Fragment>
-              <IconButton 
-                sx={{border:'1px solid #ccc'}}
-                alt="delete" 
-                onClick={handleCancelPost} 
-                disabled={!isOnline}
-              >
-                <DeleteIcon />
-              </IconButton>
-              <IconButton 
-                sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}}
-                alt="send"
-                disabled={!isOnline || !newPost?.title}
-                onClick={()=>handleSubmit(newPost)}
-              >
-                <SendIcon />
-              </IconButton>
-            </Fragment>
-          }
-        </div>
-        {activeOptions && <Divider/>}
-        {newPost?.title &&
-        <div style={{display:'flex',flexDirection:'column',gap:'1em'}}>
-          <TextField 
-            label="Author"
-            variant="outlined"
-            size="small"
-            sx={{ flex:1 }}
-            placeholder={`Author`}
-            disabled={!isOnline}
-            value={newPost?.author || ''}
-            name="author"
-            onChange={handleValue}
-          />
-          <TextField 
-            label="Description"
-            variant="outlined"
-            size="small"
-            sx={{ flex:1 }}
-            placeholder={`Description`}
-            disabled={!isOnline}
-            value={newPost?.description || ''}
-            name="description"
-            onChange={handleValue}
-            multiline
-            minRows={4}
-          />
-        </div>
-        }
-        {
-        newPost?.thumbnail && 
-        <Card className={styles.cardPostContentImage}>
-          <CardMedia
-            component={newPost.thumbnail.type.startsWith('image') ? "img" : "video"}
-            loading="lazy"
-            alt="img-post" 
-            src={URL.createObjectURL(newPost.thumbnail)}
-            sx={{
-              width:'100%',
-              height:'100%',
-              objectFit:'cover'
-            }}
-            controls={newPost.thumbnail.type.startsWith('video')}
-          />
-        </Card>
-        }
-        <Divider/>
-        <div className={styles.footerCard}>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Group</Button>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} onClick={handleButtonClick} >Image/Video</Button>
-        <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Activity</Button>
-        </div>
-      </div>
+      <Formik
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+        initialValues={{
+          title:'',
+          author:'',
+          description:''
+        }}
+      >
+        {({ isSubmitting, values, resetForm }) => (
+        <Form>
+          <div className={styles.bodyCard}>
+            <div className={styles.headerCard}>
+              <Avatar
+                src="https://picsum.photos/200/300" 
+                alt="profile" 
+              />
+              <div style={{flex:1}}>
+                <Field
+                  as={TextField}
+                  label="Title"
+                  variant="outlined"
+                  size="small"
+                  style={{ width:'100%' }}
+                  placeholder={`What do you think, ${user?.username}?`}
+                  disabled={!isOnline}
+                  name="title"
+                />
+                <ErrorMessage name="title" component="div" style={{color:'red'}} />
+              </div>
+              {
+                values?.title && 
+                <Fragment>
+                  <IconButton 
+                    sx={{border:'1px solid #ccc'}}
+                    alt="delete" 
+                    onClick={()=>resetForm()} 
+                    disabled={!isOnline || isSubmitting}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton 
+                    sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}}
+                    alt="send"
+                    disabled={!isOnline || !values?.title || isSubmitting}
+                    onClick={handleSubmit}
+                    type='submit'
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Fragment>
+              }
+            </div>
+            {values?.title && <Divider/>}
+            {values?.title&&
+            <div style={{display:'flex',flexDirection:'column',gap:'1em'}}>
+              <div style={{flex:1}}>
+                <Field
+                  as={TextField}
+                  label="Author"
+                  variant="outlined"
+                  size="small"
+                  style={{ width:'100%' }}
+                  placeholder={`Author`}
+                  disabled={!isOnline || isSubmitting}
+                  name="author"
+                />
+                <ErrorMessage name="author" component="div" style={{color:'red'}} />
+              </div>
+              <div style={{flex:1}}>
+                <Field
+                  as={TextField}
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                  style={{ width:'100%' }}
+                  placeholder={`Description`}
+                  disabled={!isOnline || isSubmitting}
+                  name="description"
+                />
+                <ErrorMessage name="description" component="div" style={{color:'red'}} />
+              </div>
+            </div>
+            }
+            {
+            file && 
+            <Card className={styles.cardPostContentImage}>
+              <CardMedia
+                component={file.type.startsWith('image') ? "img" : "video"}
+                loading="lazy"
+                alt="img-post" 
+                src={URL.createObjectURL(file)}
+                sx={{
+                  width:'100%',
+                  height:'100%',
+                  objectFit:'cover'
+                }}
+                controls={file.type.startsWith('video')}
+              />
+            </Card>
+            }
+            <Divider/>
+            <div className={styles.footerCard}>
+            <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Group</Button>
+            <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} onClick={handleButtonClick} >Image/Video</Button>
+            <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Activity</Button>
+            </div>
+          </div>
+        </Form>
+        )}
+      </Formik>
       <Snackbar 
         open={Boolean(error)} autoHideDuration={6000} 
         anchorOrigin={{ 

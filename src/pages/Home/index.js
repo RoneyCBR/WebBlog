@@ -23,7 +23,7 @@ const Home = () => {
     const res = await getPosts();
     console.log("debug res::",res);
     setItems(res);
-    setItemsTemp(res);
+    setItemsTemp(res?.reverse());
     } catch (error) {
       const newError  = error?.response?.data || 'Ocurrio un error, al cargar las publicaciones intente mas tarde!';
       setError(newError?.message || 'Ocurrio un error, al cargar las publicaciones intente mas tarde!');
@@ -43,17 +43,21 @@ const Home = () => {
     getAllPost();
   },[]);
 
-  let timeout = null;
-
   useEffect(() => {
-    if(search){
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setItems(itemsTemp.filter(item => item.title.includes(search)));
-      }, 1000);
-    }
-    if(search === '' || !search){
-      setItems(itemsTemp);
+    try{
+      if(search){
+        const lowerCaseSearch = search.toLowerCase();
+        setItems(itemsTemp.filter(item => 
+          ['title', 'author', 'description'].some(field =>
+            item[field]?.toLowerCase().includes(lowerCaseSearch)
+          )
+        ));
+      }
+      if(search === '' || !search){
+        setItems(itemsTemp);
+      }
+    } catch (error) {
+      console.error(error);
     }
   },[search, itemsTemp]);
 
