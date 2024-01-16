@@ -29,8 +29,13 @@ const CardPost = ({ item }) => {
             </div>
           </Box>
         </div>
+        <h2>{item?.title}</h2>
+        <div className={styles.baseInfo}>
+          <h5>Author:{item?.author}</h5>
+          <small>{item?.created}</small>
+        </div>
         <div>
-          <p>{item?.post}</p>
+          <p>{item?.description}</p>
         </div>
         <Card className={styles.cardPostContentImage}>
           <CardMedia

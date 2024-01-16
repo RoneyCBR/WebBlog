@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import styles from './Home.module.css';
 import Header from '../../components/Header/Header';
 import SideBarOptions from '../../components/SideBarOptions/SideBarOptions';
-import SideBarFriends from '../../components/SideBarFriends/SideBarFriends';
+// import SideBarFriends from '../../components/SideBarFriends/SideBarFriends';
 import CardCreatePost from '../../components/CardCreatePost/CardCreatePost';
 import { useUserContext } from '@/context/UserContext';
 import SectionPost from './components/SectionPost';
@@ -52,7 +52,7 @@ const Home = () => {
           </div>
         </div>
         <div className={`${styles.item} ${styles.optionsFrends}`}>
-          <SideBarFriends />
+          {/* <SideBarFriends /> */}
         </div>
       </main>
     </Fragment>

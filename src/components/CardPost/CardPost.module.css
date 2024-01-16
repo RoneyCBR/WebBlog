@@ -30,3 +30,10 @@
   border-radius: 10px !important;
   max-height: 400px;
 }
+
+.baseInfo{
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+}

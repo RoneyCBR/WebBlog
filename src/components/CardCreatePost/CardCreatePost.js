@@ -42,12 +42,12 @@ const CardCreatePost = ({user, concatNewPost}) => {
 
   const handleSubmit = useCallback(async (newPost) => {
     try{
-      const currentDate = new Date();
-      const { post, thumbnail } = newPost;
+      const { title, author, description, thumbnail } = newPost;
       const body = {
-        post,
+        title,
+        author,
+        description,
         thumbnail: thumbnail || null,
-        date: currentDate,
         userId: user?.pk
       }
       const res = await newPostFetch(body);
@@ -58,7 +58,7 @@ const CardCreatePost = ({user, concatNewPost}) => {
     }
   },[user,concatNewPost,setNewPost]);
 
-  const activeOptions = (newPost?.post || newPost?.thumbnail )
+  const activeOptions = (newPost?.title)
 
   return (
     <Card sx={{borderRadius:'20px'}}>
@@ -76,14 +76,14 @@ const CardCreatePost = ({user, concatNewPost}) => {
             alt="profile" 
           />
           <TextField 
-            label=""
+            label="Title"
             variant="outlined"
             size="small"
             sx={{ flex:1 }}
             placeholder={`What do you think, ${user?.username}?`}
             disabled={!isOnline}
-            value={newPost?.post || ''}
-            name="post"
+            value={newPost?.title || ''}
+            name="title"
             onChange={handleValue}
           />
           {
@@ -100,7 +100,7 @@ const CardCreatePost = ({user, concatNewPost}) => {
               <IconButton 
                 sx={{transform:'rotate(-25deg)',border:'1px solid #ccc'}}
                 alt="send"
-                disabled={!isOnline || !newPost?.post}
+                disabled={!isOnline || !newPost?.title}
                 onClick={()=>handleSubmit(newPost)}
               >
                 <SendIcon />
@@ -109,10 +109,32 @@ const CardCreatePost = ({user, concatNewPost}) => {
           }
         </div>
         {activeOptions && <Divider/>}
-        {newPost?.post &&
-        <div style={{display:'flex',flexDirection:'column'}}>
-          Post:
-          <p>{newPost?.post}</p>
+        {newPost?.title &&
+        <div style={{display:'flex',flexDirection:'column',gap:'1em'}}>
+          <TextField 
+            label="Author"
+            variant="outlined"
+            size="small"
+            sx={{ flex:1 }}
+            placeholder={`Author`}
+            disabled={!isOnline}
+            value={newPost?.author || ''}
+            name="author"
+            onChange={handleValue}
+          />
+          <TextField 
+            label="Description"
+            variant="outlined"
+            size="small"
+            sx={{ flex:1 }}
+            placeholder={`Description`}
+            disabled={!isOnline}
+            value={newPost?.description || ''}
+            name="description"
+            onChange={handleValue}
+            multiline
+            minRows={4}
+          />
         </div>
         }
         {
