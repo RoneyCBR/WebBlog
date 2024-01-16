@@ -60,6 +60,7 @@ const CardCreatePost = ({user, concatNewPost}) => {
       const res = await newPostFetch(body);
       concatNewPost(res?.post)
       paramsFormik?.resetForm?.();
+      setFile(null);
     } catch (error) {
       setError(error?.response?.data?.message || 'Ocurrio un error, intente mas tarde!');
       console.error(error);
@@ -114,7 +115,7 @@ const CardCreatePost = ({user, concatNewPost}) => {
                   <IconButton 
                     sx={{border:'1px solid #ccc'}}
                     alt="delete" 
-                    onClick={()=>resetForm()} 
+                    onClick={()=>{resetForm(); setFile(null);}} 
                     disabled={!isOnline || isSubmitting}
                   >
                     <DeleteIcon />
