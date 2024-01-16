@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import styles from './CardPost.module.css';
 import Avatar from '@mui/material/Avatar';
@@ -11,6 +11,21 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardMedia from '@mui/material/CardMedia';
 
 const CardPost = ({ item }) => {
+
+  const isLongText = item?.description?.length > 100;
+  const textShort = item?.description?.slice(0, 100);
+  const textLong = item?.description?.slice(100, item?.description?.length);
+  const [viewMore, setViewMore] = useState(false);
+
+  useEffect(() => {
+    if (isLongText) {
+      setViewMore(true);
+    }
+  }, []);
+
+  const handleViewMore = useCallback(() => {
+    setViewMore(!viewMore);
+  },[viewMore,viewMore]);
 
 
   return (
@@ -34,8 +49,8 @@ const CardPost = ({ item }) => {
           <h5>Author:{item?.author}</h5>
           <small>{item?.created}</small>
         </div>
-        <div>
-          <p>{item?.description}</p>
+        <div className={styles.description}>
+          <p>{viewMore ? textLong : textShort} {isLongText && <span style={{textDecoration:'underline',color:'blue'}} onClick={handleViewMore}><br />{viewMore ? 'view less': '... view more'}</span>}</p>
         </div>
         <Card className={styles.cardPostContentImage}>
           <CardMedia
