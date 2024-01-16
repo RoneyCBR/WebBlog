@@ -62,4 +62,5 @@
   text-decoration: underline;
   color: black;
   border: none;
+  cursor: pointer;
 }

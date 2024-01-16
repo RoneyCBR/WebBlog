@@ -1,23 +1,21 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import NewFormDynamic from '@/components/FormDynamic/FormDynamic';
 import Button from '@mui/material/Button';
 import styles from './Login.module.css';
 import { useUserContext } from '@/context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { newUserFetch } from '../../api/user/user';
-import { newAuthFetch } from '../../api/authentication/authentication';
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
-  const { setUser } = useUserContext();
+  const { user, setUser, connectUser, loading, setLoading } = useUserContext();
   const [tab, setTab] = useState(0);
-  const [loading, setLoading] = useState(false);
+
   
   const formData = {
     username: 'textShort',
-    password: 'password',
-    remember_me: 'checkbox',
+    password: 'password'
   };
 
   const formDataSignIn = {
@@ -28,28 +26,34 @@ const LoginPage = () => {
 
   const handleSubmit = useCallback(async(values,formik) => {
     try{
-      setLoading(true);
-      console.log('debug handleSubmit::',values);
       const { username, password } = values;
-      let res = null;
       if(tab === 0){
-        res = await newAuthFetch({ username, password });
+        await connectUser(username, password);
       }else{
-        res = await newUserFetch({ username, password });
+        const res = await newUserFetch({ username, password });
+        setUser(res);
       }
-      setUser(res);
-      navigate('/home');
     }catch(error){
       console.log('error handleSubmit::',error);
     } finally {
       formik.setSubmitting(false);
-      setLoading(false);
     }
-  },[navigate,tab,setLoading]);
+  },[navigate,tab]);
 
   const handleChangeTab = useCallback(() => {
     setTab(tab===0 ? 1 : 0);
   },[setTab,tab]);
+  
+  useEffect(() => {
+    if(!loading && user){
+      navigate('/home');
+    }
+  },[loading,user]);
+
+  useEffect(() => {
+    setLoading(false)
+  },[]);
+
 
   return (
     <main className={styles.main}>
@@ -57,7 +61,7 @@ const LoginPage = () => {
       <div className={styles.contentImg} />
       <div className={styles.form} >
         <div className={styles.items}>
-          <h1>Login WebBlog</h1>
+          <h1>{tab === 0 ? 'Login WebBlog':'Register WebBlog'}</h1>
           <NewFormDynamic 
             enableReinitialize={true}
             initValues={tab === 0? formData:formDataSignIn}

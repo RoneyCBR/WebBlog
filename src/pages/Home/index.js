@@ -29,6 +29,10 @@ const Home = () => {
     }
   },[setItems,setLoading]);
 
+  const concatNewPost = useCallback((newPost) => {
+    setItems([...items, newPost]);
+  }, [setItems, items]);
+
   useEffect(() => {
     getAllPost();
   },[]);
@@ -43,7 +47,7 @@ const Home = () => {
         </div>
         <div className={`${styles.item}`} >
           <div className={`${styles.postContainer}`}>
-            <CardCreatePost user={user} init={init}/>
+            <CardCreatePost user={user} concatNewPost={concatNewPost}/>
             <SectionPost items={items} loading={loading} error={error}/>
           </div>
         </div>

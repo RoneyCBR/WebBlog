@@ -17,7 +17,7 @@ const propTypes = {
   user: PropTypes.object
 }
 
-const CardCreatePost = ({user, init}) => {
+const CardCreatePost = ({user, concatNewPost}) => {
   const { isOnline } = useOffLineContext();
   const [newPost, setNewPost] = useState(null);
   const fileInput = useRef(null);
@@ -50,13 +50,13 @@ const CardCreatePost = ({user, init}) => {
         date: currentDate,
         userId: user?.pk
       }
-      await newPostFetch(body);
-      await init();
+      const res = await newPostFetch(body);
+      concatNewPost(res?.post)
       setNewPost(null);
     } catch (error) {
       console.error(error);
     }
-  },[user,init,setNewPost]);
+  },[user,concatNewPost,setNewPost]);
 
   const activeOptions = (newPost?.post || newPost?.thumbnail )
 
