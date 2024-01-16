@@ -98,11 +98,11 @@ const CardCreatePost = ({user, concatNewPost}) => {
               <div style={{flex:1}}>
                 <Field
                   as={TextField}
-                  label="Title"
+                  label={values?.title ? 'Title' : `What do you think, ${user?.username}?`}
                   variant="outlined"
                   size="small"
                   style={{ width:'100%' }}
-                  placeholder={`What do you think, ${user?.username}?`}
+                  placeholder={'Title'}
                   disabled={!isOnline}
                   name="title"
                 />
