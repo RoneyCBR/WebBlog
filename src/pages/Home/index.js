@@ -7,13 +7,15 @@ import CardCreatePost from '../../components/CardCreatePost/CardCreatePost';
 import { useUserContext } from '@/context/UserContext';
 import SectionPost from './components/SectionPost';
 import { getPosts } from '../../api/post/post';
+import { useSearchContext } from '../../context/SearchContext';
 
 const Home = () => {
-  
+  const { search } = useSearchContext();
   const { user } = useUserContext();
   const [items,setItems] = useState([]);
   const [loading,setLoading] = useState(true);
   const [error,setError] = useState(null);
+  const [itemsTemp, setItemsTemp] = useState([]);
 
   const getAllPost = useCallback(async () => {
     try{
@@ -21,6 +23,7 @@ const Home = () => {
     const res = await getPosts();
     console.log("debug res::",res);
     setItems(res);
+    setItemsTemp(res);
     } catch (error) {
       setError(error+'');
       console.error(error);
@@ -30,12 +33,28 @@ const Home = () => {
   },[setItems,setLoading]);
 
   const concatNewPost = useCallback((newPost) => {
-    setItems([...items, newPost]);
+    const nenwItems = [...items, newPost];
+    setItemsTemp(nenwItems);
+    setItems(nenwItems);
   }, [setItems, items]);
 
   useEffect(() => {
     getAllPost();
   },[]);
+
+  let timeout = null;
+
+  useEffect(() => {
+    if(search){
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setItems(itemsTemp.filter(item => item.title.includes(search)));
+      }, 1000);
+    }
+    if(search === '' || !search){
+      setItems(itemsTemp);
+    }
+  },[search, itemsTemp]);
 
   return (
     <Fragment>

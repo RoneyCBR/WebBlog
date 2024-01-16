@@ -8,6 +8,7 @@ import theme from "./theme";
 import RoutesMain from "./RoutesMain";
 import { UserProvider } from "./context/UserContext";
 import { OffLineProvider } from "./context/OffLineContext";
+import { SearchProvider } from "./context/SearchContext";
 
 const App = () => {
 
@@ -17,7 +18,9 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <UserProvider>
             <OffLineProvider>
-              <RoutesMain />
+              <SearchProvider>
+                <RoutesMain />
+              </SearchProvider>
             </OffLineProvider>
           </UserProvider>
         </ThemeProvider>
