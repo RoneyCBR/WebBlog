@@ -1,0 +1,11 @@
+{
+  "username": {
+    "required": "Username is required"
+  },
+  "password": {
+    "required": "Password is required"
+  },
+  "terms_and_conditions":{
+    "required": "You must accept the terms and conditions to continue"
+  }
+}

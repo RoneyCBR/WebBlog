@@ -7,7 +7,9 @@ const languages = [
   'es'
 ];
 const sections = [
-  'login'
+  'login',
+  'home',
+  'form'
 ];
 
 const resources = languages.reduce((acc, lang) => {
@@ -25,6 +27,7 @@ i18n
     resources,
     fallbackLng: "en", 
     ns: sections,
+    lng: "en",
     defaultNS: 'translate',
     detection: {
       order: ['navigator'],

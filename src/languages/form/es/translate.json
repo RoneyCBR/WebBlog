@@ -1,0 +1,11 @@
+{
+  "username": {
+    "required": "Debe ingresar un nombre de usuario"
+  },
+  "password": {
+    "required": "Debe ingresar una contraseña"
+  },
+  "terms_and_conditions":{
+    "required": "Debe aceptar los términos y condiciones"
+  }
+}
