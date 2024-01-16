@@ -25,7 +25,8 @@ const Home = () => {
     setItems(res);
     setItemsTemp(res);
     } catch (error) {
-      setError(error+'');
+      const newError  = error?.response?.data || 'Ocurrio un error, al cargar las publicaciones intente mas tarde!';
+      setError(newError?.message || 'Ocurrio un error, al cargar las publicaciones intente mas tarde!');
       console.error(error);
     } finally {
       setLoading(false);

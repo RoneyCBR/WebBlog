@@ -28,12 +28,14 @@ export const UserProvider = ({ children }) => {
 
   const connectUser = useCallback(async(username,password) => {
     try{
+      setError(null);
       setLoading(true);
       const res = await newAuthFetch({ username, password });
       setUser(res);
       sessionStorage.setItem('user', JSON.stringify(res)); 
     }catch (error) {
-      setError(error+'');
+      const newError  = error?.response?.data || 'Ocurrio un error, intente mas tarde!';
+      setError(newError?.message || 'Ocurrio un error, intente mas tarde!');
       console.error(error);
     } finally {
       setLoading(false);

@@ -5,13 +5,14 @@ import styles from './Login.module.css';
 import { useUserContext } from '@/context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { newUserFetch } from '../../api/user/user';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
-  const { user, setUser, connectUser, loading, setLoading } = useUserContext();
+  const { user, setUser, connectUser, loading, setLoading, error } = useUserContext();
   const [tab, setTab] = useState(0);
-
   
   const formData = {
     username: 'textShort',
@@ -32,6 +33,7 @@ const LoginPage = () => {
       }else{
         const res = await newUserFetch({ username, password });
         setUser(res);
+        sessionStorage.setItem('user', JSON.stringify(res)); 
       }
     }catch(error){
       console.log('error handleSubmit::',error);
@@ -74,8 +76,9 @@ const LoginPage = () => {
                     type="submit"
                     data-testid="submit-button"
                     {...props}
+                    sx={{ mt: 3}}
                   >
-                    Submit
+                    Enter
                   </Button>
                 </center>
               )
@@ -91,6 +94,17 @@ const LoginPage = () => {
         </div>
         </div>
       </div>
+      <Snackbar 
+        open={Boolean(error)} autoHideDuration={6000} 
+        anchorOrigin={{ 
+          vertical:"top",
+          horizontal:"center"
+        }}
+      >
+        <Alert variant="filled" severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
     </main>
   )
 }

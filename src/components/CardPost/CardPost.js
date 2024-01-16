@@ -52,12 +52,13 @@ const CardPost = ({ item }) => {
         <div className={styles.description}>
           <p>{viewMore ? textLong : textShort} {isLongText && <span style={{textDecoration:'underline',color:'blue'}} onClick={handleViewMore}><br />{viewMore ? 'view less': '... view more'}</span>}</p>
         </div>
+        {item?.thumbnail &&
         <Card className={styles.cardPostContentImage}>
           <CardMedia
             component="img"
             loading="lazy"
             alt="img-post"
-            src={item?.thumbnail || '/banner-login.jpg'}
+            src={'https://picsum.photos/300/300'}
             sx={{
               width: '100%',
               height: '100%',
@@ -65,6 +66,7 @@ const CardPost = ({ item }) => {
             }}
           />
         </Card>
+        } 
         <div className={styles.footerCard}>
           <p>Likes: 11</p>
           <p>Shared: 22</p>

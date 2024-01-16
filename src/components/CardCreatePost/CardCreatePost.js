@@ -12,6 +12,8 @@ import SendIcon from '@mui/icons-material/Send'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useOffLineContext } from '../../context/OffLineContext'
 import { newPostFetch } from '../../api/post/post'
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const propTypes = {
   user: PropTypes.object
@@ -20,6 +22,7 @@ const propTypes = {
 const CardCreatePost = ({user, concatNewPost}) => {
   const { isOnline } = useOffLineContext();
   const [newPost, setNewPost] = useState(null);
+  const [error, setError] = useState(null);
   const fileInput = useRef(null);
 
   const handleValue = useCallback((e) => {
@@ -54,6 +57,7 @@ const CardCreatePost = ({user, concatNewPost}) => {
       concatNewPost(res?.post)
       setNewPost(null);
     } catch (error) {
+      setError(error?.response?.data?.message || 'Ocurrio un error, intente mas tarde!');
       console.error(error);
     }
   },[user,concatNewPost,setNewPost]);
@@ -161,6 +165,17 @@ const CardCreatePost = ({user, concatNewPost}) => {
         <Button variant='contained' sx={{ flex:1, textTransform:'none' }} disabled={!isOnline} >Activity</Button>
         </div>
       </div>
+      <Snackbar 
+        open={Boolean(error)} autoHideDuration={6000} 
+        anchorOrigin={{ 
+          vertical:"top",
+          horizontal:"center"
+        }}
+      >
+        <Alert variant="filled" severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
     </Card>
   )
 }
